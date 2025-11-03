@@ -1,0 +1,13 @@
+package com.client.event.render;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
+
+@Getter
+@AllArgsConstructor
+public class HudRendererEvent {
+	private DrawContext context;
+	private RenderTickCounter tickCounter;
+}

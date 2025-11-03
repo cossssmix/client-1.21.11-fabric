@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"package": "com.client.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"player.ClientPlayerEntityMixin",
+		"player.KeyboardMixin",
+		"entity.LivingEntityRendererMixin",
+		"render.TitleScreenMixin",
+		"render.WorldRendererMixin",
+		"render.InGameHudMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
