@@ -14,7 +14,7 @@ import net.minecraft.client.render.RenderTickCounter;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
-	@Inject(method = "render", at = @At("HEAD"))
+	@Inject(method = "render", at = @At("TAIL"))
 	private void onRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
 		Client.getEventBus().post(new HudRendererEvent(context, tickCounter));
 	}

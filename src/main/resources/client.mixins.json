@@ -5,10 +5,13 @@
 	"mixins": [
 		"player.ClientPlayerEntityMixin",
 		"player.KeyboardMixin",
+		"player.KeyboardInputMixin",
 		"entity.LivingEntityRendererMixin",
+		"entity.EntityMixin",
 		"render.TitleScreenMixin",
 		"render.WorldRendererMixin",
-		"render.InGameHudMixin"
+		"render.InGameHudMixin",
+		"accessor.EntityAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

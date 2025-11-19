@@ -7,6 +7,7 @@ import com.client.module.AbstractModule;
 import com.client.module.EnumCategory;
 import com.client.module.ModuleInfo;
 import static com.client.util.IMinecraft.mc;
+
 import com.google.common.eventbus.Subscribe;
 
 @ModuleInfo(
