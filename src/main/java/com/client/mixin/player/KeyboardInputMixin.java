@@ -14,6 +14,7 @@ import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.util.PlayerInput;
+import net.minecraft.util.math.Vec2f;
 
 @Mixin(KeyboardInput.class)
 public abstract class KeyboardInputMixin extends Input {
@@ -40,8 +41,10 @@ public abstract class KeyboardInputMixin extends Input {
 
         Client.getEventBus().post(event);
 
-		super.movementForward = event.getMovementForward();
-		super.movementSideways = event.getMovementStrafe();
+		super.movementVector = new Vec2f(
+			event.getMovementStrafe(),
+			event.getMovementForward()
+		).normalize();
 
         super.playerInput = new PlayerInput(
             event.getMovementForward() > 0,

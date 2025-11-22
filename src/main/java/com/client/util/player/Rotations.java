@@ -1,55 +1,43 @@
 package com.client.util.player;
 
 import static com.client.util.IMinecraft.mc;
-
-import java.util.concurrent.LinkedBlockingQueue;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Rotations {
+	private static float serverYaw = Float.NaN, serverPitch = Float.NaN;
+    private static float prevYaw = Float.NaN, prevPitch = Float.NaN;
 
-    public static final LinkedBlockingQueue<RotationRequest> rotationQueue = new LinkedBlockingQueue<>();
-
-    private static float preYaw, prePitch;
-
-    public static void rotate(double yaw, double pitch) {
-        rotationQueue.add(new RotationRequest(yaw, pitch));
+    public static void rotate(float yaw, float pitch) {
+        serverYaw = yaw;
+		serverPitch = pitch;
     }
 
     public static void onSendMovementPacketsPre() {
-        if (mc.cameraEntity!= mc.player) return;
+        if (mc.getCameraEntity() != mc.player) return;
 
-        RotationRequest request = rotationQueue.poll();
-        if (request!= null) {
-            preYaw = mc.player.getYaw();
-            prePitch = mc.player.getPitch();
+        if (!Float.isNaN(serverYaw) && !Float.isNaN(serverPitch)) {
+            prevYaw = mc.player.getYaw();
+            prevPitch = mc.player.getPitch();
 
-            mc.player.setYaw((float) request.yaw);
-            mc.player.setPitch((float) request.pitch);
+            mc.player.setYaw(serverYaw);
+            mc.player.setPitch(serverPitch);
         }
     }
+
+	public static void reset() {
+		serverYaw = Float.NaN;
+		serverPitch = Float.NaN;
+	}
 
     public static void onSendMovementPacketsPost() {
-        if (preYaw!= 0 && prePitch!= 0) {
-            mc.player.setYaw(preYaw);
-            mc.player.setPitch(prePitch);
-            preYaw = 0;
-            prePitch = 0;
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class RotationRequest {
-        double yaw;
-        double pitch;
-
-        public RotationRequest(double yaw, double pitch) {
-            this.yaw = yaw;
-            this.pitch = pitch;
+        if (!Float.isNaN(prevYaw) && !Float.isNaN(prevPitch)) {
+            mc.player.setYaw(prevYaw);
+            mc.player.setPitch(prevPitch);
+            prevYaw = Float.NaN;
+            prevPitch = Float.NaN;
         }
     }
 }

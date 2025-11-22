@@ -10,14 +10,15 @@ import com.client.event.player.KeyboardEvent;
 import static com.client.util.IMinecraft.mc;
 
 import net.minecraft.client.Keyboard;
+import net.minecraft.client.input.KeyInput;
 
 
 @Mixin(Keyboard.class)
 public abstract class KeyboardMixin {
 	@Inject(method = "onKey", at = @At("HEAD"))
-	private void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo ci) {
+	private void onKey(long window, int action, KeyInput input, CallbackInfo ci) {
 		if (window == mc.getWindow().getHandle()) {
-			Client.getEventBus().post(new KeyboardEvent(window, key, scancode, action, modifiers));
+			Client.getEventBus().post(new KeyboardEvent(window, action, input));
 		}
 	}
 }

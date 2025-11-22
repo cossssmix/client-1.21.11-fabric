@@ -9,8 +9,6 @@ import com.client.Client;
 import com.client.event.player.KeyboardEvent;
 import com.client.module.combat.*;
 import com.client.module.movement.*;
-import com.client.module.visuals.*;
-import com.client.ui.screen.ClickGuiScreen;
 import com.google.common.eventbus.Subscribe;
 import static com.client.util.IMinecraft.mc;
 
@@ -22,18 +20,17 @@ public final class ModuleStorage {
 
 		modules.addAll(List.of(
 			new AutoSprint(),
-			new ClickGui(),
 			new Test()
 		));
 	}
 
 	@Subscribe
 	public void onKeyboard(KeyboardEvent event) {
-		boolean isValidScreen = mc.currentScreen == null || mc.currentScreen instanceof ClickGuiScreen;
+		boolean isValidScreen = mc.currentScreen == null;
 
 		if (event.getAction() == GLFW.GLFW_PRESS && isValidScreen) {
 			for (AbstractModule module : modules) {
-				if (module.getKey() == event.getKey()) {
+				if (module.getKey() == event.getInput().getKeycode()) {
 					module.toggle();
 				}
 			}

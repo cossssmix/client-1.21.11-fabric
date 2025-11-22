@@ -41,9 +41,6 @@ public abstract class ClientPlayerEntityMixin {
 		if (sendMovementEvent.isCancelled()) {
 			ci.cancel();
 		}
-
-		// mc.player.setYaw(sendMovementEvent.getYaw());
-        // mc.player.setPitch(sendMovementEvent.getPitch());
 	}
 
 	@Inject(method = "sendMovementPackets", at = @At("TAIL"))
