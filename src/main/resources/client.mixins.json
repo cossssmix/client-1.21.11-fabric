@@ -6,10 +6,12 @@
 		"player.ClientPlayerEntityMixin",
 		"player.KeyboardMixin",
 		"player.KeyboardInputMixin",
-		"entity.LivingEntityRendererMixin",
 		"entity.EntityMixin",
+		"entity.PlayerEntityMixin",
+		"entity.LivingEntityMixin",
 		"render.TitleScreenMixin",
 		"render.WorldRendererMixin",
+		"render.LivingEntityRendererMixin",
 		"render.InGameHudMixin",
 		"accessor.EntityAccessor"
 	],

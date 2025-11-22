@@ -2,16 +2,15 @@ package com.client.module.combat;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.client.Client;
 import com.client.event.player.KeyboardInputEvent;
 import com.client.event.player.PlayerTickEvent;
-import com.client.event.player.SendMovementEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.mixin.accessor.EntityAccessor;
 import com.client.module.AbstractModule;
 import com.client.module.EnumCategory;
 import com.client.module.ModuleInfo;
 import com.client.util.player.MovementCorrection;
-import com.client.util.player.Rotations;
 
 import static com.client.util.IMinecraft.mc;
 import com.google.common.eventbus.Subscribe;
@@ -38,20 +37,24 @@ public class Test extends AbstractModule {
 		PlayerEntity target = null;
 		double best = 9;
 
-		for (Entity e : mc.world.getEntities()) {
-			if (e == mc.player) continue;
-			if (!(e instanceof PlayerEntity)) continue;
+		for (Entity entity : mc.world.getEntities()) {
+			if (entity == mc.player) continue;
+			if (!(entity instanceof PlayerEntity)) continue;
 
-			double d = mc.player.squaredDistanceTo(e);
+			double d = mc.player.squaredDistanceTo(entity);
+
 			if (d <= best) {
 				best = d;
-				target = (PlayerEntity) e;
+				target = (PlayerEntity) entity;
 			} else {
 				target = null;
 			}
 		}
 
-		if (target == null) return;
+		if (target == null) {
+			Client.getRotation().reset();
+			return;
+		};
 
 		double dx = target.getX() - mc.player.getX();
 		double dz = target.getZ() - mc.player.getZ();
@@ -60,18 +63,12 @@ public class Test extends AbstractModule {
 		fakeYaw = (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90f);
 		fakePitch = (float) (-Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))));
 
-		Rotations.rotate(fakeYaw, fakePitch);
-	}
-
-	@Subscribe
-	public void onSendMovement(SendMovementEvent event) {
-		mc.player.setHeadYaw(fakeYaw);
-		mc.player.setBodyYaw(fakeYaw);
+		Client.getRotation().set(fakeYaw, fakePitch);
 	}
 	
 	@Override
 	public void onDisable() {
-		Rotations.reset();
+		Client.getRotation().reset();
 	}
 
 	@Subscribe

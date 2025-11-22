@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import static com.client.util.IMinecraft.mc;
 
 @Mixin(Entity.class)
-public class EntityMixin {
+public abstract class EntityMixin {
 	@Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
 	private void onUpdateVelocity(float speed, Vec3d movementInput, CallbackInfo ci) {
 		if ((Object) this == mc.player) {
