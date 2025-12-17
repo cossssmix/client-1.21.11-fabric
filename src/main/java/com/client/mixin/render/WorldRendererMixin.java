@@ -32,7 +32,7 @@ public abstract class WorldRendererMixin {
 		boolean renderSky,
 		CallbackInfo ci
 	) {
-		Client.getEventBus().post(new WorldRendererEvent(
+		Client.getContext().getEventBus().post(new WorldRendererEvent(
 			allocator,
 			tickCounter,
 			renderBlockOutline,

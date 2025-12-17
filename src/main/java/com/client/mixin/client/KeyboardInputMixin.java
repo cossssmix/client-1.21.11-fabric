@@ -1,4 +1,4 @@
-package com.client.mixin.player;
+package com.client.mixin.client;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +39,7 @@ public abstract class KeyboardInputMixin extends Input {
             moveForward, moveSideways, jumpKey, sneakKey, sprintKey
         );
 
-        Client.getEventBus().post(event);
+        Client.getContext().getEventBus().post(event);
 
 		super.movementVector = new Vec2f(
 			event.getMovementStrafe(),

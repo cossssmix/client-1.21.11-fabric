@@ -1,24 +1,19 @@
 package com.client;
 
-import com.client.module.ModuleStorage;
-import com.client.util.player.SilentRotation;
-import com.google.common.eventbus.EventBus;
-
 import net.fabricmc.api.ModInitializer;
+
+import com.client.core.ClientContext;
+
 import lombok.Getter;
 
 public final class Client implements ModInitializer {
 	@Getter
-	private static EventBus eventBus;
+	private static final String MOD_ID = "client";
 	@Getter
-	private static SilentRotation rotation;
-	@Getter
-	private static ModuleStorage moduleStorage;
+	private static ClientContext context;
 
 	@Override
 	public void onInitialize() {
-		eventBus = new EventBus();
-		rotation = new SilentRotation();
-		moduleStorage = new ModuleStorage();
+		context = new ClientContext();
 	}
 }

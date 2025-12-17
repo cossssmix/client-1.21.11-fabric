@@ -1,4 +1,4 @@
-package com.client.mixin.player;
+package com.client.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,7 +18,7 @@ public abstract class KeyboardMixin {
 	@Inject(method = "onKey", at = @At("HEAD"))
 	private void onKey(long window, int action, KeyInput input, CallbackInfo ci) {
 		if (window == mc.getWindow().getHandle()) {
-			Client.getEventBus().post(new KeyboardEvent(window, action, input));
+			Client.getContext().getEventBus().post(new KeyboardEvent(window, action, input));
 		}
 	}
 }

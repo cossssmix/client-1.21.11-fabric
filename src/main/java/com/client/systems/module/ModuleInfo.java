@@ -1,4 +1,4 @@
-package com.client.module;
+package com.client.systems.module;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,5 +10,5 @@ import java.lang.annotation.ElementType;
 public @interface ModuleInfo {
 	String name();
     String description() default "";
-    EnumCategory category();
+    Category category();
 }

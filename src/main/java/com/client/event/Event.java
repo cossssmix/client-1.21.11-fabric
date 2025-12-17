@@ -3,7 +3,7 @@ package com.client.event;
 import lombok.Getter;
 
 @Getter
-public class Event {
+public abstract class Event {
 	private boolean cancelled;
 	
 	public void cancel() {

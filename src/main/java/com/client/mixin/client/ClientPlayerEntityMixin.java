@@ -1,4 +1,4 @@
-package com.client.mixin.player;
+package com.client.mixin.client;
 
 import static com.client.util.IMinecraft.mc;
 
@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
-import com.client.event.EventStage;
 import com.client.event.player.PlayerTickEvent;
 import com.client.event.player.SendMovementEvent;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -17,22 +16,21 @@ import net.minecraft.client.network.ClientPlayerEntity;
 public abstract class ClientPlayerEntityMixin {
 	@Inject(method = "tick", at = @At("HEAD"))
 	private void onTick(CallbackInfo ci) {
-		Client.getEventBus().post(new PlayerTickEvent());
+		Client.getContext().getEventBus().post(new PlayerTickEvent());
 	}
 
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
 	private void onPreSendMovementPackets(CallbackInfo ci) {
-		SendMovementEvent sendMovementEvent = new SendMovementEvent(
+		SendMovementEvent.Pre sendMovementEvent = new SendMovementEvent.Pre(
 			mc.player.getX(),
 			mc.player.getY(),
 			mc.player.getZ(),
 			mc.player.getYaw(),
 			mc.player.getPitch(),
-			mc.player.isOnGround(),
-			EventStage.PRE
+			mc.player.isOnGround()
 		);
 
-		Client.getEventBus().post(sendMovementEvent);
+		Client.getContext().getEventBus().post(sendMovementEvent);
 
 		if (sendMovementEvent.isCancelled()) {
 			ci.cancel();
@@ -41,6 +39,6 @@ public abstract class ClientPlayerEntityMixin {
 
 	@Inject(method = "sendMovementPackets", at = @At("TAIL"))
 	private void onPostSendMovementPackets(CallbackInfo ci) {
-		Client.getEventBus().post(new SendMovementEvent(EventStage.POST));
+		Client.getContext().getEventBus().post(new SendMovementEvent.Post());
 	}
 }

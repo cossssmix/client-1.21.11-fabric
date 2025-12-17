@@ -1,11 +1,39 @@
 package com.client.util.player;
 
-import com.client.event.player.KeyboardInputEvent;
-
-import net.minecraft.util.math.MathHelper;
 import static com.client.util.IMinecraft.mc;
 
+import com.client.Client;
+import com.client.event.player.KeyboardInputEvent;
+import com.client.event.player.UpdateVelocityEvent;
+import com.client.mixin.accessor.EntityAccessor;
+import com.client.util.rotation.SilentRotation;
+import com.google.common.eventbus.Subscribe;
+
+import net.minecraft.util.math.MathHelper;
+
 public class MovementCorrection {
+	private final SilentRotation silentRotation;
+
+	public MovementCorrection(SilentRotation silentRotation) {
+		this.silentRotation = silentRotation;
+
+		Client.getContext().getEventBus().register(this);
+	}
+
+    @Subscribe
+    public void onUpdateVelocity(UpdateVelocityEvent event) {
+		silentRotation.getServerRotation().ifPresent(rotation -> {
+       		MovementCorrection.fixUpdateVelocity(event, rotation.x());
+		});
+    }
+
+    @Subscribe
+    public void onKeyboardInput(KeyboardInputEvent event) {
+		silentRotation.getServerRotation().ifPresent(rotation -> {
+			MovementCorrection.fixKeyboardInput(event, rotation.x());
+		});
+    }
+
     public static double direction(float rotationYaw, final double moveForward, final double moveStrafing) {
         if (moveForward < 0F) rotationYaw += 180F;
         float forward = 1F;
@@ -16,7 +44,19 @@ public class MovementCorrection {
         return Math.toRadians(rotationYaw);
     }
 
-    public static void fixMovement(KeyboardInputEvent event, float yaw) {
+	public static void fixUpdateVelocity(UpdateVelocityEvent event, float yaw) {
+		if (Float.isNaN(yaw)) return;
+
+		event.setVelocity(EntityAccessor.movementInputToVelocity(
+			event.getMovementInput(),
+			event.getSpeed(),
+			yaw
+		));
+	}
+
+    public static void fixKeyboardInput(KeyboardInputEvent event, float yaw) {
+		if (Float.isNaN(yaw)) return;
+		
         final float forward = event.getMovementForward();
         final float strafe = event.getMovementStrafe();
 

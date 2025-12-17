@@ -3,9 +3,10 @@
 	"package": "com.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"player.ClientPlayerEntityMixin",
-		"player.KeyboardMixin",
-		"player.KeyboardInputMixin",
+		"client.MinecraftClientMixin",
+		"client.KeyboardMixin",
+		"client.KeyboardInputMixin",
+		"client.ClientPlayerEntityMixin",
 		"entity.EntityMixin",
 		"entity.PlayerEntityMixin",
 		"entity.LivingEntityMixin",

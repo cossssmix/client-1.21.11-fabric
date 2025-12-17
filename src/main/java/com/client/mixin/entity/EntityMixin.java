@@ -1,5 +1,7 @@
 package com.client.mixin.entity;
 
+import static com.client.util.IMinecraft.mc;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,9 +13,6 @@ import com.client.mixin.accessor.EntityAccessor;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
-
-import static com.client.util.IMinecraft.mc;
-
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 	@Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
@@ -28,9 +27,11 @@ public abstract class EntityMixin {
 				EntityAccessor.movementInputToVelocity(movementInput, speed, mc.player.getYaw())
 			);
 
-			Client.getEventBus().post(updateVelocityEvent);
+			Client.getContext().getEventBus().post(updateVelocityEvent);
 
-			mc.player.setVelocity(mc.player.getVelocity().add(updateVelocityEvent.getVelocity()));
+			mc.player.setVelocity(
+				mc.player.getVelocity().add(updateVelocityEvent.getVelocity())
+			);
 		}
 	}
 }

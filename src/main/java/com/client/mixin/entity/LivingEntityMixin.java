@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
-import com.client.event.EventStage;
 import com.client.event.player.PlayerJumpEvent;
 
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -17,14 +16,14 @@ public abstract class LivingEntityMixin {
 	@Inject(method = "jump", at = @At("HEAD"))
 	private void onJumpPre(CallbackInfo ci) {
 		if (((Object) this) instanceof ClientPlayerEntity) {
-			Client.getEventBus().post(new PlayerJumpEvent(EventStage.PRE));
+			Client.getContext().getEventBus().post(new PlayerJumpEvent.Pre());
 		}
 	}
 
 	@Inject(method = "jump", at = @At("TAIL"))
 	private void onJumpPost(CallbackInfo ci) {
 		if (((Object) this) instanceof ClientPlayerEntity) {
-			Client.getEventBus().post(new PlayerJumpEvent(EventStage.POST));
+			Client.getContext().getEventBus().post(new PlayerJumpEvent.Post());
 		}
 	}
 }

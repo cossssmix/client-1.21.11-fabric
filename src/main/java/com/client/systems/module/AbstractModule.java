@@ -1,4 +1,6 @@
-package com.client.module;
+package com.client.systems.module;
+
+import static com.client.util.IMinecraft.mc;
 
 import com.client.Client;
 
@@ -6,19 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import static com.client.util.IMinecraft.mc;
 
+@Getter
 public abstract class AbstractModule {
-	@Getter
 	private final String name, description;
-
-	@Getter @Setter
+	@Setter
 	private int key;
-
-	@Getter
-	private EnumCategory category;
-
-	@Getter @Setter
+	private Category category;
 	private boolean enabled;
 
 	public AbstractModule() {
@@ -33,14 +29,14 @@ public abstract class AbstractModule {
 	public void onDisable() {}
 
 	public void toggle() {
-		setEnabled(!isEnabled());
+		enabled = !enabled;
 
-		if (isEnabled()) {
+		if (enabled) {
 			onEnable();
-			Client.getEventBus().register(this);
+			Client.getContext().getEventBus().register(this);
 		} else {
 			onDisable();
-			Client.getEventBus().unregister(this);
+			Client.getContext().getEventBus().unregister(this);
 		}
 
 		mc.player.sendMessage(

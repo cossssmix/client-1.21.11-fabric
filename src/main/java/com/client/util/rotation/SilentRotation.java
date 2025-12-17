@@ -1,0 +1,115 @@
+package com.client.util.rotation;
+
+import static com.client.util.IMinecraft.mc;
+
+import java.util.Optional;
+
+import org.joml.Vector2f;
+
+import com.client.Client;
+import com.client.event.player.PlayerJumpEvent;
+import com.client.event.player.SendMovementEvent;
+import com.client.event.render.UpdateRenderStateEvent;
+import com.google.common.eventbus.Subscribe;
+
+import lombok.Getter;
+import net.minecraft.util.math.MathHelper;
+
+public class SilentRotation {
+	@Getter
+	private Optional<Vector2f> serverRotation;
+	@Getter
+	private Optional<Vector2f> originalRotation;
+	@Getter
+	private Optional<Vector2f> prevRotation;
+
+	public SilentRotation() {
+		serverRotation = Optional.empty();
+		originalRotation = Optional.empty();
+		prevRotation = Optional.empty();
+
+		Client.getContext().getEventBus().register(this);
+	}
+
+    public void set(float yaw, float pitch) {
+		serverRotation = Optional.of(new Vector2f(yaw, pitch));
+    }
+
+	@Subscribe
+	public void onPlayerJumpPre(PlayerJumpEvent.Pre event) {
+		serverRotation.ifPresent(rotation -> {
+			originalRotation = Optional.of(new Vector2f(
+				mc.player.getYaw(),
+				mc.player.getPitch()
+			));
+
+			mc.player.setYaw(rotation.x());
+			mc.player.setPitch(rotation.y());
+		});
+	}
+
+	@Subscribe
+	public void onPlayerJumpPost(PlayerJumpEvent.Post event) {
+		originalRotation.ifPresent(rotation -> {
+			mc.player.setYaw(rotation.x());
+			mc.player.setPitch(rotation.y());
+
+			originalRotation = Optional.empty();
+		});
+	}
+
+	@Subscribe
+	public void onUpdateRenderState(UpdateRenderStateEvent event) {
+		if (event.getLivingEntity() != mc.player) return;
+		
+		serverRotation.ifPresent(rotation -> {
+			prevRotation.ifPresentOrElse(prevRotation -> {
+				float pitch = event.getTickProgress() == 1.0F
+					? rotation.y()
+					: MathHelper.lerp(event.getTickProgress(), prevRotation.y(), rotation.y());
+				
+				event.getLivingEntityRenderState().pitch = pitch;
+
+				prevRotation.set(mc.player.getYaw(), pitch);
+			}, () -> {
+				prevRotation = Optional.of(new Vector2f(
+					rotation.x(), rotation.y()
+				));
+			});
+		});
+	}
+
+	@Subscribe
+    public void onSendMovementPre(SendMovementEvent.Pre event) {
+		if (mc.getCameraEntity() != mc.player) return;
+
+		serverRotation.ifPresent(rotation -> {
+			originalRotation = Optional.of(new Vector2f(
+				mc.player.getYaw(),
+				mc.player.getPitch()
+			));
+
+			mc.player.setYaw(rotation.x());
+			mc.player.setPitch(rotation.y());
+
+			mc.player.setHeadYaw(rotation.x());
+			mc.player.setBodyYaw(rotation.x());
+		});
+    }
+
+	@Subscribe
+	public void onSendMovementPost(SendMovementEvent.Post event) {
+		if (mc.getCameraEntity() != mc.player) return;
+
+		originalRotation.ifPresent(rotation -> {
+			mc.player.setYaw(rotation.x());
+			mc.player.setPitch(rotation.y());
+
+			originalRotation = Optional.empty();
+		});
+	}
+
+	public void reset() {
+		serverRotation = Optional.empty();
+	}
+}
