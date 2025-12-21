@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.joml.Vector2f;
 
-import com.client.Client;
+import com.client.core.ClientContext;
 import com.client.event.player.PlayerJumpEvent;
 import com.client.event.player.SendMovementEvent;
 import com.client.event.render.UpdateRenderStateEvent;
@@ -15,7 +15,7 @@ import com.google.common.eventbus.Subscribe;
 import lombok.Getter;
 import net.minecraft.util.math.MathHelper;
 
-public class SilentRotation {
+public class RotationController {
 	@Getter
 	private Optional<Vector2f> serverRotation;
 	@Getter
@@ -23,16 +23,16 @@ public class SilentRotation {
 	@Getter
 	private Optional<Vector2f> prevRotation;
 
-	public SilentRotation() {
+	public RotationController(ClientContext ctx) {
 		serverRotation = Optional.empty();
 		originalRotation = Optional.empty();
 		prevRotation = Optional.empty();
 
-		Client.getContext().getEventBus().register(this);
+		ctx.getEventBus().register(this);
 	}
 
-    public void set(float yaw, float pitch) {
-		serverRotation = Optional.of(new Vector2f(yaw, pitch));
+    public void set(Vector2f rotation) {
+		serverRotation = Optional.of(rotation);
     }
 
 	@Subscribe

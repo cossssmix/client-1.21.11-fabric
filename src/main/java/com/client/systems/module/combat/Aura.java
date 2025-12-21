@@ -3,12 +3,15 @@ package com.client.systems.module.combat;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-import com.client.Client;
+import com.client.core.ClientContext;
+import com.client.event.player.KeyboardInputEvent;
 import com.client.event.player.PlayerTickEvent;
+import com.client.event.player.UpdateVelocityEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
 import com.client.systems.module.ModuleInfo;
-import com.client.util.rotation.SilentRotation;
+import com.client.util.player.MovementController;
+import com.client.util.rotation.RotationController;
 
 import static com.client.util.IMinecraft.mc;
 
@@ -28,12 +31,14 @@ import net.minecraft.util.Hand;
     category = Category.Combat
 )
 public class Aura extends AbstractModule {
-	private final SilentRotation silentRotation;
+	private final RotationController rotationController;
+	private final MovementController movementController;
     private Optional<Vector2f> auraRotation = Optional.empty();
 	// private Optional<Vector2f> prevAuraRotation = Optional.empty();
 
-    public Aura() {
-		silentRotation = Client.getContext().getSilentRotation();
+    public Aura(ClientContext ctx) {
+		this.rotationController = ctx.getRotationController();
+		this.movementController = ctx.getMovementController();
 
         setKey(GLFW.GLFW_KEY_R);
     }
@@ -56,7 +61,7 @@ public class Aura extends AbstractModule {
         }
 
         if (target == null) {
-            silentRotation.reset();
+            rotationController.reset();
 
 			auraRotation = Optional.empty();
 			// prevAuraRotation = Optional.empty();
@@ -78,7 +83,7 @@ public class Aura extends AbstractModule {
         float tickProgress = mc.getRenderTickCounter().getTickProgress(true);
 
 		auraRotation.ifPresent(
-			rotation -> silentRotation.set(rotation.x(), rotation.y())
+			rotation -> rotationController.set(new Vector2f(rotation.x(), rotation.y()))
 		);
 
         this.attackTarget(target, tickProgress);
@@ -106,8 +111,18 @@ public class Aura extends AbstractModule {
         }
     }
 
+	@Subscribe
+    public void onUpdateVelocity(UpdateVelocityEvent event) {
+       	movementController.fixUpdateVelocity(event);
+    }
+
+    @Subscribe
+    public void onKeyboardInput(KeyboardInputEvent event) {
+		movementController.fixKeyboardInput(event);
+    }
+
     @Override
     public void onDisable() {
-        silentRotation.reset();
+        rotationController.reset();
     }
 }

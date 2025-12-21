@@ -2,16 +2,17 @@ package com.client.systems.module.movement;
 
 import static com.client.util.IMinecraft.mc;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-import com.client.Client;
+import com.client.core.ClientContext;
 import com.client.event.player.KeyboardInputEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
 import com.client.systems.module.ModuleInfo;
-import com.client.util.player.MovementCorrection;
-import com.client.util.rotation.SilentRotation;
+import com.client.util.player.MovementController;
+import com.client.util.rotation.RotationController;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.util.math.MathHelper;
@@ -22,23 +23,20 @@ import net.minecraft.util.math.MathHelper;
 	category = Category.Movement
 )
 public class LegitStrafe extends AbstractModule {
-	private final SilentRotation silentRotation;
+	private final RotationController rotationController;
+	private final MovementController movementController;
 	private float yaw = Float.NaN;
 
-	public LegitStrafe() {
-		silentRotation = Client.getContext().getSilentRotation();
+	public LegitStrafe(ClientContext ctx) {
+		this.rotationController = ctx.getRotationController();
+		this.movementController = ctx.getMovementController();
 
 		setKey(GLFW.GLFW_KEY_U);
 	}
 
 	@Override
 	public void onDisable() {
-		silentRotation.reset();
-	}
-
-	@Subscribe
-	public void onUpdateVelocity(UpdateVelocityEvent event) {
-		MovementCorrection.fixUpdateVelocity(event, yaw);
+		rotationController.reset();
 	}
 
 	@Subscribe
@@ -55,9 +53,9 @@ public class LegitStrafe extends AbstractModule {
 
 		yaw = MathHelper.wrapDegrees(mc.player.getYaw() + yawOffset);
 
-		silentRotation.set(yaw, mc.player.getPitch());
+		rotationController.set(new Vector2f(yaw, mc.player.getPitch()));
 
-		MovementCorrection.fixKeyboardInput(event, yaw);
+		movementController.fixKeyboardInput(event);
 	}
 
 	private float calculateYawOffset(float forward, float strafe) {
@@ -65,4 +63,9 @@ public class LegitStrafe extends AbstractModule {
 
 		return (float) Math.toDegrees(Math.atan2(-strafe, forward));
 	}
+
+	@Subscribe
+    public void onUpdateVelocity(UpdateVelocityEvent event) {
+       	movementController.fixUpdateVelocity(event);
+    }
 }
