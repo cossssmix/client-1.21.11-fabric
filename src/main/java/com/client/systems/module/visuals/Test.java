@@ -6,17 +6,11 @@ import com.client.event.player.PlayerTickEvent;
 import com.client.event.render.HudRendererEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
-import com.client.systems.module.ModuleInfo;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
-@ModuleInfo(
-    name = "test",
-    description = "BPS Counter",
-    category = Category.Visuals
-)
 public class Test extends AbstractModule {
 
     private final MinecraftClient mc = MinecraftClient.getInstance();
@@ -26,6 +20,8 @@ public class Test extends AbstractModule {
     private double bps = 0.0;
 
     public Test() {
+		super("test", "", Category.Visuals);
+
         setKey(GLFW.GLFW_KEY_J);
     }
 

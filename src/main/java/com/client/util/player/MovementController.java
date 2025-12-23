@@ -1,6 +1,6 @@
 package com.client.util.player;
 
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 import com.client.core.ClientContext;
 import com.client.event.player.KeyboardInputEvent;
@@ -35,11 +35,9 @@ public class MovementController {
 				rotation.x()
 			));
 		});
-
 	}
 
     public void fixKeyboardInput(KeyboardInputEvent event) {
-
 		this.rotationController.getServerRotation().ifPresent(rotation -> {
 			final float forward = event.getMovementForward();
 			final float strafe = event.getMovementStrafe();

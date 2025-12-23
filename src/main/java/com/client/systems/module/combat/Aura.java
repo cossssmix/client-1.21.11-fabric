@@ -9,11 +9,8 @@ import com.client.event.player.PlayerTickEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
-import com.client.systems.module.ModuleInfo;
 import com.client.util.player.MovementController;
 import com.client.util.rotation.RotationController;
-
-import static com.client.util.IMinecraft.mc;
 
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,18 +22,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Hand;
 
-@ModuleInfo(
-    name = "aura",
-    description = "",
-    category = Category.Combat
-)
-public class Aura extends AbstractModule {
+import static com.client.util.MinecraftVariables.mc;
+
+public final class Aura extends AbstractModule {
 	private final RotationController rotationController;
 	private final MovementController movementController;
     private Optional<Vector2f> auraRotation = Optional.empty();
 	// private Optional<Vector2f> prevAuraRotation = Optional.empty();
 
     public Aura(ClientContext ctx) {
+		super("aura", "", Category.Combat);
+
 		this.rotationController = ctx.getRotationController();
 		this.movementController = ctx.getMovementController();
 

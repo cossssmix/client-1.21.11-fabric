@@ -13,12 +13,10 @@ public abstract class AbstractModule {
 	@Getter @Setter
 	private boolean enabled;
 
-	public AbstractModule() {
-		ModuleInfo moduleInfoAnnotation = this.getClass().getAnnotation(ModuleInfo.class);
-
-		name = moduleInfoAnnotation.name();
-		description = moduleInfoAnnotation.description();
-		category = moduleInfoAnnotation.category();
+	public AbstractModule(String name, String description, Category category) {
+		this.name = name;
+		this.description = description;
+		this.category = category;
 	}
 
 	public void onEnable() {}

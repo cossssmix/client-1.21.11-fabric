@@ -1,6 +1,6 @@
 package com.client.systems.module.movement;
 
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
@@ -10,24 +10,20 @@ import com.client.event.player.KeyboardInputEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
-import com.client.systems.module.ModuleInfo;
 import com.client.util.player.MovementController;
 import com.client.util.rotation.RotationController;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.util.math.MathHelper;
 
-@ModuleInfo(
-	name = "legit strafe",
-	description = "легитные стрейфы",
-	category = Category.Movement
-)
 public class LegitStrafe extends AbstractModule {
 	private final RotationController rotationController;
 	private final MovementController movementController;
 	private float yaw = Float.NaN;
 
 	public LegitStrafe(ClientContext ctx) {
+		super("legit strafe", "легитные стрейфы", Category.Movement);
+
 		this.rotationController = ctx.getRotationController();
 		this.movementController = ctx.getMovementController();
 
@@ -41,6 +37,8 @@ public class LegitStrafe extends AbstractModule {
 
 	@Subscribe
 	public void onKeyboardInput(KeyboardInputEvent event) {
+		movementController.fixKeyboardInput(event);
+
 		float forward = event.getMovementForward();
 		float strafe  = event.getMovementStrafe();
 
@@ -54,8 +52,6 @@ public class LegitStrafe extends AbstractModule {
 		yaw = MathHelper.wrapDegrees(mc.player.getYaw() + yawOffset);
 
 		rotationController.set(new Vector2f(yaw, mc.player.getPitch()));
-
-		movementController.fixKeyboardInput(event);
 	}
 
 	private float calculateYawOffset(float forward, float strafe) {

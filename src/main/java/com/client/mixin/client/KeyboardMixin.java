@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
 import com.client.event.player.KeyboardEvent;
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.input.KeyInput;

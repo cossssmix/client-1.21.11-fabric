@@ -1,6 +1,6 @@
 package com.client.mixin.client;
 
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

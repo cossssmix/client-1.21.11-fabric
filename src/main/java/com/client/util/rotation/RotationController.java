@@ -1,6 +1,6 @@
 package com.client.util.rotation;
 
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 import java.util.Optional;
 

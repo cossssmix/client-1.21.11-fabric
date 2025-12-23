@@ -16,7 +16,7 @@ import lombok.Getter;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import static com.client.util.IMinecraft.mc;
+import static com.client.util.MinecraftVariables.mc;
 
 public final class ModuleStorage {
 	private ClientContext ctx;
@@ -32,9 +32,9 @@ public final class ModuleStorage {
 
 		modules.addAll(List.of(
 			new AutoSprint(),
+			new LegitStrafe(ctx),
 			new Aura(ctx),
-			new Test(),
-			new LegitStrafe(ctx)
+			new Test()
 		));
 	}
 
