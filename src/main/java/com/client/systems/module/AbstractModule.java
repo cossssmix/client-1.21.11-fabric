@@ -5,12 +5,11 @@ import lombok.Setter;
 
 @Getter
 public abstract class AbstractModule {
-	@Getter
 	private final String name, description;
 	@Setter
 	private int key;
-	private Category category;
-	@Getter @Setter
+	private final Category category;
+	@Setter
 	private boolean enabled;
 
 	public AbstractModule(String name, String description, Category category) {

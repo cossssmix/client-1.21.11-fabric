@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
-import com.client.event.player.KeyboardInputEvent;
+import com.client.event.client.KeyboardInputEvent;
 
 import net.minecraft.client.input.Input;
 import net.minecraft.client.input.KeyboardInput;
@@ -35,7 +35,7 @@ public abstract class KeyboardInputMixin extends Input {
         float moveForward = calculateMovement(forwardKey, backwardKey);
         float moveSideways = calculateMovement(leftKey, rightKey);
 
-        KeyboardInputEvent event = new KeyboardInputEvent(
+        final KeyboardInputEvent event = new KeyboardInputEvent(
             moveForward, moveSideways, jumpKey, sneakKey, sprintKey
         );
 

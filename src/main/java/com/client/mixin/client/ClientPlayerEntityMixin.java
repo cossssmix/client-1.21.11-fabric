@@ -21,7 +21,7 @@ public abstract class ClientPlayerEntityMixin {
 
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
 	private void onPreSendMovementPackets(CallbackInfo ci) {
-		SendMovementEvent.Pre sendMovementEvent = new SendMovementEvent.Pre(
+		final SendMovementEvent.Pre sendMovementEvent = new SendMovementEvent.Pre(
 			mc.player.getX(),
 			mc.player.getY(),
 			mc.player.getZ(),

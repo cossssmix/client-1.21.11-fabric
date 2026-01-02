@@ -23,7 +23,7 @@ public class RotationController {
 	@Getter
 	private Optional<Vector2f> prevRotation;
 
-	public RotationController(ClientContext ctx) {
+	public RotationController(final ClientContext ctx) {
 		serverRotation = Optional.empty();
 		originalRotation = Optional.empty();
 		prevRotation = Optional.empty();
@@ -36,7 +36,7 @@ public class RotationController {
     }
 
 	@Subscribe
-	public void onPlayerJumpPre(PlayerJumpEvent.Pre event) {
+	public void onPlayerJumpPre(final PlayerJumpEvent.Pre event) {
 		serverRotation.ifPresent(rotation -> {
 			originalRotation = Optional.of(new Vector2f(
 				mc.player.getYaw(),
@@ -49,7 +49,7 @@ public class RotationController {
 	}
 
 	@Subscribe
-	public void onPlayerJumpPost(PlayerJumpEvent.Post event) {
+	public void onPlayerJumpPost(final PlayerJumpEvent.Post event) {
 		originalRotation.ifPresent(rotation -> {
 			mc.player.setYaw(rotation.x());
 			mc.player.setPitch(rotation.y());
@@ -59,7 +59,7 @@ public class RotationController {
 	}
 
 	@Subscribe
-	public void onUpdateRenderState(UpdateRenderStateEvent event) {
+	public void onUpdateRenderState(final UpdateRenderStateEvent event) {
 		if (event.getLivingEntity() != mc.player) return;
 		
 		serverRotation.ifPresent(rotation -> {
@@ -80,7 +80,7 @@ public class RotationController {
 	}
 
 	@Subscribe
-    public void onSendMovementPre(SendMovementEvent.Pre event) {
+    public void onSendMovementPre(final SendMovementEvent.Pre event) {
 		if (mc.getCameraEntity() != mc.player) return;
 
 		serverRotation.ifPresent(rotation -> {
@@ -98,7 +98,7 @@ public class RotationController {
     }
 
 	@Subscribe
-	public void onSendMovementPost(SendMovementEvent.Post event) {
+	public void onSendMovementPost(final SendMovementEvent.Post event) {
 		if (mc.getCameraEntity() != mc.player) return;
 
 		originalRotation.ifPresent(rotation -> {

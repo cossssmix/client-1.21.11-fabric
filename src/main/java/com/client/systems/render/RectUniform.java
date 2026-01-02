@@ -23,7 +23,7 @@ public class RectUniform {
     private final Vector4f round;
     private final float smoothness;
 
-    public RectUniform(Vector2f size, Vector4f round, float smoothness) {
+    public RectUniform(final Vector2f size, final Vector4f round, final float smoothness) {
         this.size = size;
         this.round = round;
         this.smoothness = smoothness;

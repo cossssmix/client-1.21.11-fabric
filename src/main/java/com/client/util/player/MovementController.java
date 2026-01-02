@@ -3,7 +3,7 @@ package com.client.util.player;
 import static com.client.util.MinecraftVariables.mc;
 
 import com.client.core.ClientContext;
-import com.client.event.player.KeyboardInputEvent;
+import com.client.event.client.KeyboardInputEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.mixin.accessor.EntityAccessor;
 import com.client.util.rotation.RotationController;
@@ -13,21 +13,32 @@ import net.minecraft.util.math.MathHelper;
 public class MovementController {
 	private RotationController rotationController;
 
-	public MovementController(ClientContext ctx) {
+	public MovementController(final ClientContext ctx) {
 		this.rotationController = ctx.getRotationController();
 	}
 
-    public double direction(float rotationYaw, final double moveForward, final double moveStrafing) {
-        if (moveForward < 0F) rotationYaw += 180F;
-        float forward = 1F;
-        if (moveForward < 0F) forward = -0.5F;
-        else if (moveForward > 0F) forward = 0.5F;
-        if (moveStrafing > 0F) rotationYaw -= 90F * forward;
-        if (moveStrafing < 0F) rotationYaw += 90F * forward;
-        return Math.toRadians(rotationYaw);
-    }
+	public double direction(final float rotationYaw, final double moveForward, final double moveStrafing) {
+		float yaw = rotationYaw;
 
-	public void fixUpdateVelocity(UpdateVelocityEvent event) {
+		if (moveForward < 0.0) {
+			yaw += 180.0F;
+		}
+
+		final float forwardMultiplier =
+				moveForward < 0.0 ? -0.5F :
+				moveForward > 0.0 ?  0.5F :
+									1.0F;
+
+		if (moveStrafing > 0.0) {
+			yaw -= 90.0F * forwardMultiplier;
+		} else if (moveStrafing < 0.0) {
+			yaw += 90.0F * forwardMultiplier;
+		}
+
+		return Math.toRadians(yaw);
+	}
+
+	public void fixUpdateVelocity(final UpdateVelocityEvent event) {
 		this.rotationController.getServerRotation().ifPresent(rotation -> {
 			event.setVelocity(EntityAccessor.movementInputToVelocity(
 				event.getMovementInput(),
@@ -37,7 +48,7 @@ public class MovementController {
 		});
 	}
 
-    public void fixKeyboardInput(KeyboardInputEvent event) {
+    public void fixKeyboardInput(final KeyboardInputEvent event) {
 		this.rotationController.getServerRotation().ifPresent(rotation -> {
 			final float forward = event.getMovementForward();
 			final float strafe = event.getMovementStrafe();

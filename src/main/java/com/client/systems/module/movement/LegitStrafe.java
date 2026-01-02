@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import com.client.core.ClientContext;
-import com.client.event.player.KeyboardInputEvent;
+import com.client.event.client.KeyboardInputEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
@@ -16,13 +16,17 @@ import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.util.math.MathHelper;
 
-public class LegitStrafe extends AbstractModule {
+public final class LegitStrafe extends AbstractModule {
 	private final RotationController rotationController;
 	private final MovementController movementController;
 	private float yaw = Float.NaN;
 
-	public LegitStrafe(ClientContext ctx) {
-		super("legit strafe", "легитные стрейфы", Category.Movement);
+	public LegitStrafe(final ClientContext ctx) {
+		super(
+			"legit strafe",
+			"легитные стрейфы",
+			Category.Movement
+		);
 
 		this.rotationController = ctx.getRotationController();
 		this.movementController = ctx.getMovementController();
@@ -36,9 +40,8 @@ public class LegitStrafe extends AbstractModule {
 	}
 
 	@Subscribe
-	public void onKeyboardInput(KeyboardInputEvent event) {
-		movementController.fixKeyboardInput(event);
-
+	public void onKeyboardInput(final KeyboardInputEvent event) {
+		
 		float forward = event.getMovementForward();
 		float strafe  = event.getMovementStrafe();
 
@@ -48,20 +51,22 @@ public class LegitStrafe extends AbstractModule {
 			yaw = Float.NaN;
 			return;
 		}
-
+		
 		yaw = MathHelper.wrapDegrees(mc.player.getYaw() + yawOffset);
-
+		
 		rotationController.set(new Vector2f(yaw, mc.player.getPitch()));
+		
+		movementController.fixKeyboardInput(event);
 	}
-
-	private float calculateYawOffset(float forward, float strafe) {
+	
+	private float calculateYawOffset(final float forward, final float strafe) {
 		if (forward == 0.0f && strafe == 0.0f) return Float.NaN;
 
 		return (float) Math.toDegrees(Math.atan2(-strafe, forward));
 	}
-
+	
 	@Subscribe
-    public void onUpdateVelocity(UpdateVelocityEvent event) {
+    public void onUpdateVelocity(final UpdateVelocityEvent event) {
        	movementController.fixUpdateVelocity(event);
     }
 }

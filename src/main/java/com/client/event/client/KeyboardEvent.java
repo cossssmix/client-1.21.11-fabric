@@ -1,4 +1,4 @@
-package com.client.event.player;
+package com.client.event.client;
 
 import com.client.event.Event;
 

@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
-import com.client.event.player.KeyboardEvent;
+import com.client.event.client.KeyboardEvent;
+
 import static com.client.util.MinecraftVariables.mc;
 
 import net.minecraft.client.Keyboard;

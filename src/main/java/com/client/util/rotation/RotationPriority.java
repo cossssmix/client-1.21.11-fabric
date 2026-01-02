@@ -11,7 +11,7 @@ public enum RotationPriority {
 	@Getter
 	private final int level;
 
-	RotationPriority(int level) {
+	RotationPriority(final int level) {
 		this.level = level;
 	}
 }

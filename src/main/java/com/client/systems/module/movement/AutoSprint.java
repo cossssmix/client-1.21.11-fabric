@@ -10,7 +10,7 @@ import static com.client.util.MinecraftVariables.mc;
 
 import com.google.common.eventbus.Subscribe;
 
-public class AutoSprint extends AbstractModule {
+public final class AutoSprint extends AbstractModule {
 	public AutoSprint() {
 		super("auto sprint", "автоматически включает режим бега", Category.Movement);
 				
@@ -18,7 +18,7 @@ public class AutoSprint extends AbstractModule {
 	}
 
 	@Subscribe
-	public void onPlayerTick(PlayerTickEvent event) {
+	public void onPlayerTick(final PlayerTickEvent event) {
 		mc.options.sprintKey.setPressed(true);
 	}
 
