@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 @Setter
 @Getter
 @AllArgsConstructor
-public class PushAwayEvent extends Event {
+public final class PushAwayEvent extends Event {
 	private Entity entity;
 	private Vec3d velocity;
 }

@@ -8,7 +8,7 @@ import net.minecraft.client.input.KeyInput;
 
 @Getter
 @AllArgsConstructor
-public class KeyboardEvent extends Event {
+public final class KeyboardEvent extends Event {
 	private long window;
 	private int action;
 	private KeyInput input;

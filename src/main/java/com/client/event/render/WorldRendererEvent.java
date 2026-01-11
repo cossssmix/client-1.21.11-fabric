@@ -14,7 +14,7 @@ import net.minecraft.client.util.ObjectAllocator;
 
 @Getter
 @AllArgsConstructor
-public class WorldRendererEvent extends Event {
+public final class WorldRendererEvent extends Event {
 	private ObjectAllocator allocator;
 	private RenderTickCounter tickCounter;
 	private boolean renderBlockOutline;

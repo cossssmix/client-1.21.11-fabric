@@ -24,21 +24,21 @@ public class RotationController {
 	private Optional<Vector2f> prevRotation;
 
 	public RotationController(final ClientContext ctx) {
-		serverRotation = Optional.empty();
-		originalRotation = Optional.empty();
-		prevRotation = Optional.empty();
+		this.serverRotation = Optional.empty();
+		this.originalRotation = Optional.empty();
+		this.prevRotation = Optional.empty();
 
 		ctx.getEventBus().register(this);
 	}
 
-    public void set(Vector2f rotation) {
-		serverRotation = Optional.of(rotation);
+    public void set(final Vector2f rotation) {
+		this.serverRotation = Optional.of(rotation);
     }
 
 	@Subscribe
 	public void onPlayerJumpPre(final PlayerJumpEvent.Pre event) {
-		serverRotation.ifPresent(rotation -> {
-			originalRotation = Optional.of(new Vector2f(
+		this.serverRotation.ifPresent(rotation -> {
+			this.originalRotation = Optional.of(new Vector2f(
 				mc.player.getYaw(),
 				mc.player.getPitch()
 			));
@@ -50,11 +50,11 @@ public class RotationController {
 
 	@Subscribe
 	public void onPlayerJumpPost(final PlayerJumpEvent.Post event) {
-		originalRotation.ifPresent(rotation -> {
+		this.originalRotation.ifPresent(rotation -> {
 			mc.player.setYaw(rotation.x());
 			mc.player.setPitch(rotation.y());
 
-			originalRotation = Optional.empty();
+			this.originalRotation = Optional.empty();
 		});
 	}
 
@@ -62,8 +62,8 @@ public class RotationController {
 	public void onUpdateRenderState(final UpdateRenderStateEvent event) {
 		if (event.getLivingEntity() != mc.player) return;
 		
-		serverRotation.ifPresent(rotation -> {
-			prevRotation.ifPresentOrElse(prevRotation -> {
+		this.serverRotation.ifPresent(rotation -> {
+			this.prevRotation.ifPresentOrElse(prevRotation -> {
 				float pitch = event.getTickProgress() == 1.0F
 					? rotation.y()
 					: MathHelper.lerp(event.getTickProgress(), prevRotation.y(), rotation.y());
@@ -72,7 +72,7 @@ public class RotationController {
 
 				prevRotation.set(mc.player.getYaw(), pitch);
 			}, () -> {
-				prevRotation = Optional.of(new Vector2f(
+				this.prevRotation = Optional.of(new Vector2f(
 					rotation.x(), rotation.y()
 				));
 			});
@@ -83,8 +83,8 @@ public class RotationController {
     public void onSendMovementPre(final SendMovementEvent.Pre event) {
 		if (mc.getCameraEntity() != mc.player) return;
 
-		serverRotation.ifPresent(rotation -> {
-			originalRotation = Optional.of(new Vector2f(
+		this.serverRotation.ifPresent(rotation -> {
+			this.originalRotation = Optional.of(new Vector2f(
 				mc.player.getYaw(),
 				mc.player.getPitch()
 			));
@@ -101,15 +101,15 @@ public class RotationController {
 	public void onSendMovementPost(final SendMovementEvent.Post event) {
 		if (mc.getCameraEntity() != mc.player) return;
 
-		originalRotation.ifPresent(rotation -> {
+		this.originalRotation.ifPresent(rotation -> {
 			mc.player.setYaw(rotation.x());
 			mc.player.setPitch(rotation.y());
 
-			originalRotation = Optional.empty();
+			this.originalRotation = Optional.empty();
 		});
 	}
 
 	public void reset() {
-		serverRotation = Optional.empty();
+		this.serverRotation = Optional.empty();
 	}
 }

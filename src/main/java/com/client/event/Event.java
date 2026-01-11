@@ -1,12 +1,14 @@
 package com.client.event;
 
+import java.io.Serializable;
+
 import lombok.Getter;
 
 @Getter
-public abstract class Event {
+public abstract class Event implements Serializable {
 	private boolean cancelled;
 	
 	public void cancel() {
-		cancelled = true;
+		this.cancelled = true;
 	}
 }

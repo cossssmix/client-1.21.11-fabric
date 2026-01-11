@@ -8,7 +8,7 @@ import lombok.Setter;
 import net.minecraft.util.math.Vec3d;
 
 @AllArgsConstructor
-public class UpdateVelocityEvent extends Event {
+public final class UpdateVelocityEvent extends Event {
 	@Getter
 	private Vec3d movementInput;
 	@Getter

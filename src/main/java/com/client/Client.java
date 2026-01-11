@@ -17,9 +17,9 @@ public final class Client implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		context = new ClientContext();
+		context = ClientContext.getInstance();
 
-		LOGGER.info("Modules loaded: {}", context.getModuleStorage().getModules().size());
+		LOGGER.info("Modules loaded: {}", context.getModuleRepository().getModules().size());
 		LOGGER.info("Client initialized");
 	}
 }

@@ -6,7 +6,7 @@ import com.client.Client;
 import com.client.event.render.HudRenderEvent;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
-import com.client.systems.module.ModuleStorage;
+import com.client.systems.module.ModuleRepository;
 import com.google.common.eventbus.Subscribe;
 
 import net.minecraft.SharedConstants;
@@ -20,17 +20,17 @@ import java.util.List;
 import org.lwjgl.glfw.GLFW;
 
 public final class Hud extends AbstractModule {
-	private final ModuleStorage moduleStorage;
+	private final ModuleRepository moduleRepository;
 
-	public Hud(final ModuleStorage moduleStorage) {
+	public Hud(final ModuleRepository moduleRepository) {
 		super(
 			"hud",
 			"",
 			Category.Visuals
 		);
 
-		this.moduleStorage = moduleStorage;
-		this.moduleStorage.toggle(this);
+		this.moduleRepository = moduleRepository;
+		this.moduleRepository.toggle(this);
 
 		setKey(GLFW.GLFW_KEY_B);
 	}
@@ -54,7 +54,7 @@ public final class Hud extends AbstractModule {
 	}
 
 	private void drawArrayList(final DrawContext context) {
-		List<AbstractModule> modules = new ArrayList<>(this.moduleStorage.getModules());
+		List<AbstractModule> modules = new ArrayList<>(this.moduleRepository.getModules());
 
 		modules.sort(Comparator.comparingInt((AbstractModule m) -> m.getName().length()).reversed());
 
@@ -64,7 +64,7 @@ public final class Hud extends AbstractModule {
 			if (module.isEnabled()) {
 				context.drawText(
 					mc.textRenderer,
-					module.getName(),
+					String.format("%s (%s)", module.getName(), GLFW.glfwGetKeyName(module.getKey(), 0)),
 					3,
 					yOffset,
 					Color.WHITE.getRGB(),

@@ -1,4 +1,4 @@
-package com.client.ui.screen;
+package com.client.gui.screen;
 
 import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
@@ -7,18 +7,17 @@ import net.minecraft.text.Text;
 
 import java.awt.Color;
 
-import com.client.core.ClientContext;
-import com.client.systems.module.ModuleStorage;
+import com.client.systems.module.ModuleRepository;
 import com.client.systems.module.visuals.ClickGui;
 
 public class ClickGuiScreen extends Screen {
-	private final ModuleStorage moduleStorage;
+	private final ModuleRepository moduleRepository;
 	final int width = 100, height = 200; 
 
-	public ClickGuiScreen(final String title, final ClientContext ctx) {
+	public ClickGuiScreen(final String title, final ModuleRepository moduleRepository) {
 		super(Text.of(title));
 
-		this.moduleStorage = ctx.getModuleStorage();
+		this.moduleRepository = moduleRepository;
 	}
 
 	@Override
@@ -28,10 +27,10 @@ public class ClickGuiScreen extends Screen {
 
 	@Override
 	public void close() {
-		ClickGui clickGuiModule = this.moduleStorage.getModule(ClickGui.class);
+		final ClickGui clickGuiModule = this.moduleRepository.getModule(ClickGui.class);
 
 		if (clickGuiModule.isEnabled()) {
-			this.moduleStorage.toggle(clickGuiModule);
+			this.moduleRepository.toggle(clickGuiModule);
 		}
 
 		super.close();

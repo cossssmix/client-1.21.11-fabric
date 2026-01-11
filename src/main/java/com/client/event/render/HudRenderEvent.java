@@ -9,7 +9,7 @@ import net.minecraft.client.render.RenderTickCounter;
 
 @Getter
 @AllArgsConstructor
-public class HudRenderEvent extends Event {
+public final class HudRenderEvent extends Event {
 	private DrawContext context;
 	private RenderTickCounter tickCounter;
 }

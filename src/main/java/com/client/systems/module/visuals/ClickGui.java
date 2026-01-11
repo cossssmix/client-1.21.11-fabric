@@ -4,36 +4,33 @@ import static com.client.util.MinecraftVariables.mc;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.client.core.ClientContext;
 import com.client.systems.module.AbstractModule;
 import com.client.systems.module.Category;
-import com.client.ui.screen.ClickGuiScreen;
+import com.client.systems.module.ModuleRepository;
+import com.client.gui.screen.ClickGuiScreen;
 
 public final class ClickGui extends AbstractModule {
-	private final ClientContext ctx;
-	private ClickGuiScreen clickGuiScreen;
+	private final ClickGuiScreen clickGuiScreen;
 
-    public ClickGui(final ClientContext ctx) {
+    public ClickGui(final ModuleRepository moduleRepository) {
 		super(
 			"click gui",
 			"",
 			Category.Visuals
 		);
 
-		this.ctx = ctx;
-
         setKey(GLFW.GLFW_KEY_J);
+
+		this.clickGuiScreen = new ClickGuiScreen("click gui", moduleRepository);
     }
 
 	@Override
 	public void onEnable() {
-		clickGuiScreen = new ClickGuiScreen("click gui", this.ctx);
-
-		mc.setScreen(clickGuiScreen);
+		mc.setScreen(this.clickGuiScreen);
 	}
 
 	@Override
 	public void onDisable() {
-		clickGuiScreen.close();
+		this.clickGuiScreen.close();
 	}
 }

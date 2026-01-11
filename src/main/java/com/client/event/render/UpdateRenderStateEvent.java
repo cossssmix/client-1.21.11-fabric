@@ -9,8 +9,8 @@ import net.minecraft.entity.LivingEntity;
 
 @Getter
 @AllArgsConstructor
-public class UpdateRenderStateEvent<T extends LivingEntity, S extends LivingEntityRenderState> extends Event {
-	private T livingEntity;
-	private S livingEntityRenderState;
+public final class UpdateRenderStateEvent extends Event {
+	private LivingEntity livingEntity;
+	private LivingEntityRenderState livingEntityRenderState;
 	private float tickProgress;
 }

@@ -7,6 +7,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class RenderEvent extends Event {
+public final class RenderEvent extends Event {
 	private boolean tick;
 }

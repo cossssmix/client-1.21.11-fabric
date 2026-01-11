@@ -16,9 +16,9 @@ import net.minecraft.entity.LivingEntity;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extends LivingEntityRenderState, M extends EntityModel<? super S>> {
 	@Inject(method = "updateRenderState", at = @At("TAIL"))
-	public void updateRenderState(T livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
+	private void updateRenderState(T livingEntity, S livingEntityRenderState, float f, CallbackInfo ci) {
 		Client.getContext().getEventBus().post(
-			new UpdateRenderStateEvent<T, S>(livingEntity, livingEntityRenderState, f)
+			new UpdateRenderStateEvent(livingEntity, livingEntityRenderState, f)
 		);
 	}
 }

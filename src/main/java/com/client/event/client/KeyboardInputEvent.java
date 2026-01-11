@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class KeyboardInputEvent extends Event {
+public final class KeyboardInputEvent extends Event {
     private float movementForward;
     private float movementStrafe;
     private boolean jump;

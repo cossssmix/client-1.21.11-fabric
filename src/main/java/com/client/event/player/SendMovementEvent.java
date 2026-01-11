@@ -23,13 +23,13 @@ public class SendMovementEvent extends Event {
 
 	public SendMovementEvent() {}
 
-	public static class Pre extends SendMovementEvent {
+	public static final class Pre extends SendMovementEvent {
 		public Pre(double x, double y, double z, float yaw, float pitch, boolean onGround) {
 			super(x, y, z, yaw, pitch, onGround);
 		}
 	}
 
-	public static class Post extends SendMovementEvent {
+	public static final class Post extends SendMovementEvent {
 		public Post() {
 			super();
 		}

@@ -7,24 +7,22 @@ import org.lwjgl.glfw.GLFW;
 
 import com.client.core.ClientContext;
 import com.client.event.client.KeyboardEvent;
+import com.client.gui.screen.ClickGuiScreen;
 import com.client.systems.module.combat.*;
 import com.client.systems.module.movement.*;
 import com.client.systems.module.visuals.*;
-import com.client.ui.screen.ClickGuiScreen;
 import com.google.common.eventbus.Subscribe;
 
 import lombok.Getter;
-// import net.minecraft.text.Text;
-// import net.minecraft.util.Formatting;
 
 import static com.client.util.MinecraftVariables.mc;
 
-public final class ModuleStorage {
+public final class ModuleRepository {
 	private final ClientContext ctx;
 	@Getter
 	private List<AbstractModule> modules;
 
-	public ModuleStorage(final ClientContext ctx) {
+	public ModuleRepository(final ClientContext ctx) {
 		this.ctx = ctx;
 
 		modules = new ArrayList<>();
@@ -36,7 +34,9 @@ public final class ModuleStorage {
 			new NoPush(),
 			new LegitStrafe(ctx),
 			new Aura(ctx),
-			new ClickGui(ctx),
+			new ClickGui(this),
+			new Velocity(),
+			new Test(),
 			new Hud(this)
 		));
 	}
@@ -51,14 +51,6 @@ public final class ModuleStorage {
 			module.onDisable();
 			this.ctx.getEventBus().unregister(module);
 		}
-
-		// mc.player.sendMessage(
-		// 	Text.empty()
-		// 		.append(Text.literal(module.getName()))
-		// 		.append(Text.literal(module.isEnabled() ? " вкл" : " выкл")
-		// 			.formatted(module.isEnabled() ? Formatting.GREEN : Formatting.RED)),
-		// 	false
-		// );
 	}
 
 	@Subscribe
@@ -72,10 +64,10 @@ public final class ModuleStorage {
 		}
 	}
 
-	public <T extends AbstractModule> T getModule(final Class<T> clazz) {
+	public <T extends AbstractModule> T getModule(final Class<T> module) {
 		return modules.stream()
-					.filter(clazz::isInstance)
-					.map(clazz::cast)
+					.filter(module::isInstance)
+					.map(module::cast)
 					.findFirst()
 					.orElse(null);
 	}

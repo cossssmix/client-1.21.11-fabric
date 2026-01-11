@@ -2,7 +2,6 @@ package com.client.util.player;
 
 import static com.client.util.MinecraftVariables.mc;
 
-import com.client.core.ClientContext;
 import com.client.event.client.KeyboardInputEvent;
 import com.client.event.player.UpdateVelocityEvent;
 import com.client.mixin.accessor.EntityAccessor;
@@ -13,8 +12,8 @@ import net.minecraft.util.math.MathHelper;
 public class MovementController {
 	private RotationController rotationController;
 
-	public MovementController(final ClientContext ctx) {
-		this.rotationController = ctx.getRotationController();
+	public MovementController(final RotationController rotationController) {
+		this.rotationController = rotationController;
 	}
 
 	public double direction(final float rotationYaw, final double moveForward, final double moveStrafing) {
