@@ -14,7 +14,7 @@ public abstract class AbstractModule {
 	@Setter
 	private int scancode;
 
-	public AbstractModule(String name, String description, Category category) {
+	public AbstractModule(final String name, final String description, final Category category) {
 		this.name = name;
 		this.description = description;
 		this.category = category;

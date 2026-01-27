@@ -10,6 +10,7 @@ import com.client.event.client.KeyboardEvent;
 import com.client.gui.screen.ClickGuiScreen;
 import com.client.systems.module.combat.*;
 import com.client.systems.module.movement.*;
+import com.client.systems.module.player.*;
 import com.client.systems.module.visuals.*;
 import com.google.common.eventbus.Subscribe;
 
@@ -37,7 +38,9 @@ public final class ModuleRepository {
 			new ClickGui(this),
 			new Velocity(),
 			new Test(),
-			new Hud(this)
+			new Hud(this),
+			new Speed(),
+			new NoJumpDelay()
 		));
 	}
 

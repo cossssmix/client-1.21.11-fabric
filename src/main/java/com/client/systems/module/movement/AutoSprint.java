@@ -14,7 +14,7 @@ public final class AutoSprint extends AbstractModule {
 	public AutoSprint() {
 		super("auto sprint", "автоматически включает режим бега", Category.Movement);
 				
-		setKey(GLFW.GLFW_KEY_G);
+		setKey(GLFW.GLFW_KEY_P);
 	}
 
 	@Subscribe

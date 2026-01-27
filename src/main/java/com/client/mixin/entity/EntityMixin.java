@@ -24,7 +24,7 @@ public abstract class EntityMixin {
 		if ((Object) this == mc.player) {
 			ci.cancel();
 			
-			UpdateVelocityEvent updateVelocityEvent = new UpdateVelocityEvent(
+			final UpdateVelocityEvent updateVelocityEvent = new UpdateVelocityEvent(
 				movementInput,
 				speed,
 				mc.player.getYaw(),
