@@ -1,6 +1,6 @@
 package com.client.systems.module.player;
 
-import static com.client.util.MinecraftVariables.mc;
+// import static com.client.util.MinecraftVariables.mc;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -13,8 +13,8 @@ public final class NoJumpDelay extends AbstractModule {
 
 	public NoJumpDelay() {
 		super(
-			"speed",
-			"ускоряют игрока",
+			"no jump delay",
+			"",
 			Category.Movement
 		);
 
@@ -23,6 +23,6 @@ public final class NoJumpDelay extends AbstractModule {
 	
 	@Subscribe
 	public void onPlayerTick(final PlayerTickEvent event) {
-		mc.player.setLastJump
+		// mc.player.setLastJump
 	}
 }
