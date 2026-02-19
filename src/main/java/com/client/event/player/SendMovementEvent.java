@@ -12,7 +12,14 @@ public class SendMovementEvent extends Event {
     private float yaw, pitch;
     private boolean onGround;
 
-    public SendMovementEvent(double x, double y, double z, float yaw, float pitch, boolean onGround) {
+    public SendMovementEvent(
+		final double x,
+		final double y,
+		final double z,
+		final float yaw,
+		final float pitch,
+		final boolean onGround
+	) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -24,7 +31,14 @@ public class SendMovementEvent extends Event {
 	public SendMovementEvent() {}
 
 	public static final class Pre extends SendMovementEvent {
-		public Pre(double x, double y, double z, float yaw, float pitch, boolean onGround) {
+		public Pre(
+			final double x,
+			final double y,
+			final double z,
+			final float yaw,
+			final float pitch,
+			final boolean onGround
+		) {
 			super(x, y, z, yaw, pitch, onGround);
 		}
 	}
