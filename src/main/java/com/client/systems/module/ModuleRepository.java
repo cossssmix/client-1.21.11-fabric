@@ -40,7 +40,8 @@ public final class ModuleRepository {
 			new Test(),
 			new Hud(this),
 			new Speed(),
-			new NoJumpDelay()
+			new NoJumpDelay(),
+			new Criticals()
 		));
 	}
 
@@ -61,14 +62,14 @@ public final class ModuleRepository {
 		boolean isValidScreen = mc.currentScreen == null || mc.currentScreen instanceof ClickGuiScreen;
 
 		if (event.getAction() == GLFW.GLFW_PRESS && isValidScreen) {
-			modules.stream()
+			this.modules.stream()
 				.filter(module -> module.getKey() == event.getInput().getKeycode())
 				.forEach(this::toggle);
 		}
 	}
 
 	public <T extends AbstractModule> T getModule(final Class<T> module) {
-		return modules.stream()
+		return this.modules.stream()
 					.filter(module::isInstance)
 					.map(module::cast)
 					.findFirst()

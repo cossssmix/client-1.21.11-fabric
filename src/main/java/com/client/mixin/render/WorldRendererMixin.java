@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.client.Client;
-import com.client.event.render.WorldRendererEvent;
+import com.client.event.render.WorldRenderEvent;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 
 import net.minecraft.client.render.Camera;
@@ -32,7 +32,7 @@ public abstract class WorldRendererMixin {
 		boolean renderSky,
 		CallbackInfo ci
 	) {
-		Client.getContext().getEventBus().post(new WorldRendererEvent(
+		Client.getContext().getEventBus().post(new WorldRenderEvent(
 			allocator,
 			tickCounter,
 			renderBlockOutline,

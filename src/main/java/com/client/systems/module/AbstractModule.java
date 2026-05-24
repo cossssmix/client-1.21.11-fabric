@@ -11,8 +11,6 @@ public abstract class AbstractModule {
 	private final Category category;
 	@Setter
 	private boolean enabled;
-	@Setter
-	private int scancode;
 
 	public AbstractModule(final String name, final String description, final Category category) {
 		this.name = name;

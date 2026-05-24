@@ -10,6 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.client.Client;
 import com.client.event.player.PlayerTickEvent;
 import com.client.event.player.SendMovementEvent;
+import com.client.mixin.accessor.ClientPlayerEntityAccessor;
+
 import net.minecraft.client.network.ClientPlayerEntity;
 
 @Mixin(ClientPlayerEntity.class)
@@ -19,8 +21,15 @@ public abstract class ClientPlayerEntityMixin {
 		Client.getContext().getEventBus().post(new PlayerTickEvent());
 	}
 
+	@Inject(method = "tickMovement", at = @At("RETURN"))
+	private void onTickMovement(CallbackInfo ci) {
+		final ClientPlayerEntityAccessor clientPlayerEntityAccessor = (ClientPlayerEntityAccessor) mc.player;
+		
+		clientPlayerEntityAccessor.setTicksToNextAutoJump(0);
+	}
+
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
-	private void onPreSendMovementPackets(CallbackInfo ci) {
+	private void onSendMovementPacketsPre(CallbackInfo ci) {
 		final SendMovementEvent.Pre sendMovementEvent = new SendMovementEvent.Pre(
 			mc.player.getX(),
 			mc.player.getY(),
@@ -38,7 +47,7 @@ public abstract class ClientPlayerEntityMixin {
 	}
 
 	@Inject(method = "sendMovementPackets", at = @At("TAIL"))
-	private void onPostSendMovementPackets(CallbackInfo ci) {
+	private void onSendMovementPacketsPost(CallbackInfo ci) {
 		Client.getContext().getEventBus().post(new SendMovementEvent.Post());
 	}
 }

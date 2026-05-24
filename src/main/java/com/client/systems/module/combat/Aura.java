@@ -30,13 +30,11 @@ public final class Aura extends AbstractModule {
     private final RotationController rotationController;
     private final MovementController movementController;
     private Optional<Vector2f> auraRotation;
-	// private boolean snapping;
 
     public Aura(final ClientContext ctx) {
         super("aura", "автоматически наводиться и бьёт сущность", Category.Combat);
 
 		this.auraRotation = Optional.empty();
-		// this.prevRotation = Optional.empty();
 
         this.rotationController = ctx.getRotationController();
         this.movementController = ctx.getMovementController();
@@ -50,6 +48,7 @@ public final class Aura extends AbstractModule {
             .filter(e -> e instanceof LivingEntity)
             .map(e -> (LivingEntity) e)
             .filter(livingEntity -> livingEntity != mc.player)
+			.filter(mcu::isLife)
             .filter(livingEntity -> mc.player.distanceTo(livingEntity) <= 3)
             .min((p1, p2) -> Float.compare(mc.player.distanceTo(p1), mc.player.distanceTo(p2)))
             .orElse(null);
@@ -68,14 +67,16 @@ public final class Aura extends AbstractModule {
 
         final int randomValue = ThreadLocalRandom.current().nextInt(-5, 6);
 
-        auraRotation = Optional.of(new Vector2f(
+        this.auraRotation = Optional.of(new Vector2f(
             (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90f) + randomValue,
             (float) (-Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))) + randomValue
         ));
 
-        final float tickProgress = mc.getRenderTickCounter().getTickProgress(true);
+		this.auraRotation.ifPresent(
+			rotation -> rotationController.set(new Vector2f(rotation.x(), rotation.y()))
+		);
 
-        this.attackTarget(target, tickProgress);
+		this.attackTarget(target);
     }
 
     private Vec3d getClosestHitboxPoint(final LivingEntity target) {
@@ -89,15 +90,8 @@ public final class Aura extends AbstractModule {
         return new Vec3d(x, y, z);
     }
 
-    public void attackTarget(final LivingEntity target, final float tickProgress) {
-		// if (!snapping) {
-			
-		this.auraRotation.ifPresent(
-			rotation -> rotationController.set(new Vector2f(rotation.x(), rotation.y()))
-		);
-		
-		if (mcu.canDealFullHit(mc.player) && mcu.isLife(target)) {
-
+    public void attackTarget(final LivingEntity target) {
+		if (mcu.canDealFullHit(mc.player)) {
 			if (mc.options.jumpKey.isPressed()) {
 				if (mcu.canCrit(mc.player)) {
 					mcu.attack(target);
@@ -105,29 +99,22 @@ public final class Aura extends AbstractModule {
 				return;
 			}
 
-			// this.snapping = true;
-
 			mcu.attack(target);
 		}
-		// } else {
-		// 	this.snapping = false;
-		// 	this.rotationController.reset();
-		// }
     }
 
     @Subscribe
     public void onUpdateVelocity(final UpdateVelocityEvent event) {
-        movementController.fixUpdateVelocity(event);
+        this.movementController.fixUpdateVelocity(event);
     }
 
     @Subscribe
     public void onKeyboardInput(final KeyboardInputEvent event) {
-        movementController.fixKeyboardInput(event);
+        this.movementController.fixKeyboardInput(event);
     }
 
     @Override
     public void onDisable() {
-		// prevRotation = Optional.empty();
         rotationController.reset();
     }
 }

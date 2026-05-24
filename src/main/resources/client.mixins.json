@@ -15,7 +15,8 @@
 		"render.WorldRendererMixin",
 		"render.LivingEntityRendererMixin",
 		"render.InGameHudMixin",
-		"accessor.EntityAccessor"
+		"accessor.EntityAccessor",
+		"accessor.ClientPlayerEntityAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
