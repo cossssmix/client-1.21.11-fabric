@@ -26,12 +26,12 @@ import net.minecraft.util.math.Vec3d;
 import static com.client.util.MinecraftVariables.mc;
 import static com.client.util.MinecraftVariables.mcu;
 
-public final class Aura extends AbstractModule {
+public final class AttackPlayerModule extends AbstractModule {
     private final RotationController rotationController;
     private final MovementController movementController;
     private Optional<Vector2f> auraRotation;
 
-    public Aura(final ClientContext ctx) {
+    public AttackPlayerModule(final ClientContext ctx) {
         super("aura", "автоматически наводиться и бьёт сущность", Category.Combat);
 
 		this.auraRotation = Optional.empty();

@@ -34,7 +34,7 @@ public final class ModuleRepository {
 			new AutoSprint(),
 			new NoPush(),
 			new LegitStrafe(ctx),
-			new Aura(ctx),
+			new AttackPlayerModule(ctx),
 			new ClickGui(this),
 			new Velocity(),
 			new Test(),
